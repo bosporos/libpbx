@@ -1,6 +1,6 @@
 # libPBX
 
-A Raspberry Pi driver library for the [Pixelblaze 8-64 channel expander](https://www.bhencke.com/serial-led-driver), based on Ben Hencke's [PBDriverAdapter library](https://github.com/simap/PBDriverAdapter).
+A Raspberry Pi driver library for the [Pixelblaze 8-64 channel expander](https://www.bhencke.com/serial-led-driver), based on Ben Hencke's [PBDriverAdapter library](https://github.com/simap/PBDriverAdapter) for Arduino.
 
 It depends on [wiringPi](wiringpi.com). A note for users of newer Raspberry Pis: the original creator/maintainer of wiringPi dropped the project, so if you need to get the updated version for 4b, try http://wiringpi.com/wiringpi-updated-to-2-52-for-the-raspberry-pi-4b/ or https://github.com/WiringPi/WiringPi (which seems to still be somewhat active?).
 
