@@ -70,7 +70,7 @@ clang -c -o libpbx.so pbx.c
 
 # API
 
-### `lx_pbx_init(int needs_wpi_setup)`
+### `int lx_pbx_init(int needs_wpi_setup)`
 
 Should be called once at the beginning of the program.
 
@@ -78,7 +78,7 @@ If `needs_wpi_setup` is nonzero, then it `lx_pbx_init` will call `wiringPiSetup(
 
 Returns 0 on success.
 
-### `lx_pbx_driver_create(const char * device_file, lx_pbx_driver_t * driver)`
+### `int lx_pbx_driver_create(const char * device_file, lx_pbx_driver_t * driver)`
 
 Initialize a new driver attached to a given serial port. `device_file` should be the path to the appropriate serial port (e.g. `/dev/ttyS0`, etc.).
 
@@ -90,7 +90,7 @@ lx_pbx_driver_create("/dev/serial0", &my_driver);
 
 Returns 0 on success, `LX_PBX_NO_DRIVER` if an error occurs. In the event of an error, the error will be in `errno`.
 
-### `lx_pbx_driver_write_ws2812_chan(const lx_pbx_driver_t * driver, lx_pbx_ws2812_chan_t channel, uint8_t * pixel_data, size_t pixel_num)`
+### `int lx_pbx_driver_write_ws2812_chan(const lx_pbx_driver_t * driver, lx_pbx_ws2812_chan_t channel, uint8_t * pixel_data, size_t pixel_num)`
 
 Buffer `pixel_data` to a given channel according to the settings in `channel`.
 To actually draw the buffered pixel data, use `lx_pbx_driver_draw_accumulated(lx_pbx_driver_t * driver)`.
@@ -101,13 +101,13 @@ By setting `pixel_data` to NULL, `pixel_num` to 0, and `channel->channel_type` t
 
 Returns 0 on success, otherwise will return the error. Possible errors: EINVAL, ENXIO.
 
-### `lx_pbx_driver_draw_accumulated(lx_pbx_driver_t * driver)`
+### `int lx_pbx_driver_draw_accumulated(lx_pbx_driver_t * driver)`
 
 Draws buffered channel from all channels.
 
 Returns 0 on success, otherwise will return the value of the error. Possible errors: EINVAL, ENXIO.
 
-### `lx_pbx_driver_destroy(lx_pbx_driver_t * driver)`
+### `int lx_pbx_driver_destroy(lx_pbx_driver_t * driver)`
 
 Teardown function, closes the serial port that `driver` has open.
 
