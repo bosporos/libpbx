@@ -46,7 +46,7 @@ int main ()
             }
         }
         bounce_pos += bounce_step;
-        if (bounce_pos == 10) bounce_step = -1, bounce_pos = 8;
+        if (bounce_pos == NUMPIXELS) bounce_step = -1, bounce_pos = NUMPIXELS - 2;
         if (bounce_pos == -1) bounce_step = +1, bounce_pos = 1;
 
         lx_pbx_driver_write_ws2812_chan (&pbx, &chan, (uint8_t *)&data, NUMPIXELS);
