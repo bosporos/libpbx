@@ -12,7 +12,7 @@
 #include <wiringPi.h>
 
 const char * dev = "/dev/ttyS0";
-#define NUMPIXELS 10
+#define NUMPIXELS 240
 
 #define SINEWAVE
 //#define BOUNCE
@@ -29,21 +29,23 @@ int main ()
     lx_pbx_ws2812_chan_t chan;
     lx_pbx_open_channel_ws2812 (0, &chan, LX_PBX_CHANNEL_RGB, 1, 0, 2, 0);
 
-#if SINEWAVE
+#ifdef SINEWAVE
     float sine_pos = 0;
-#elif BOUNCE
+#elif defined(BOUNCE)
     int bounce_pos  = 0;
     int bounce_step = 1;
 #endif
+#if defined(SINEWAVE) || defined(BOUNCE)
     while (1) {
-        uint8_t data[10][3];
+#endif
+        uint8_t data[NUMPIXELS][3];
         uint8_t r, g, b;
         for (int i = 0; i < NUMPIXELS; i++) {
-#if SINEWAVE
+#ifdef SINEWAVE
             r = (float)0x148 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
             g = (float)0x43 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
             b = (float)0x197 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
-#elif BOUNCE
+#elif defined(BOUNCE)
             if (bounce_pos == i) {
                 r = 0x85;
                 g = 0x24;
@@ -54,28 +56,30 @@ int main ()
                 b = 0x84;
             }
 #else /* SOLID */
-            r = 0x08;
-            g = 0x06;
-            b = 0x0d;
+            r = 0x00;
+            g = 0x00;
+            b = 0x00;
 #endif
             data[i][0] = (uint8_t)r;
             data[i][1] = (uint8_t)g;
             data[i][2] = (uint8_t)b;
         }
-#if SINEWAVE
+#ifdef SINEWAVE
         sine_pos += 0.02;
-#elif BOUNCE
+#elif defined(BOUNCE)
         bounce_pos += bounce_step;
-        if (bounce_pos == 10)
-            bounce_dir = -1, bounce_pos = 8;
+        if (bounce_pos == NUMPIXELS)
+            bounce_step = -1, bounce_pos = NUMPIXELS - 2;
         if (bounce_pos == -1)
-            bounce_dir = +1, bounce_pos = 1;
+            bounce_step = +1, bounce_pos = 1;
 #endif
         lx_pbx_driver_write_ws2812_chan (&pbx, &chan, (uint8_t *)&data, NUMPIXELS);
         // draw
         lx_pbx_driver_draw_accumulated (&pbx);
         delay (10);
+#if defined(SINEWAVE) || defined(BOUNCE)
     }
+#endif
 
     lx_pbx_driver_destroy (&pbx);
     return 0;

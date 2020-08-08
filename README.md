@@ -32,7 +32,7 @@ int main ()
     int bounce_pos  = 0;
     int bounce_step = 1;
     while (1) {
-        uint8_t data[10][3];
+        uint8_t data[NUMPIXELS][3];
         uint8_t r, g, b;
         for (int i = 0; i < NUMPIXELS; i++) {
             if (bounce_pos == i) {
@@ -46,8 +46,8 @@ int main ()
             }
         }
         bounce_pos += bounce_step;
-        if (bounce_pos == 10) bounce_dir = -1, bounce_pos = 8;
-        if (bounce_pos == -1) bounce_dir = +1, bounce_pos = 1;
+        if (bounce_pos == 10) bounce_step = -1, bounce_pos = 8;
+        if (bounce_pos == -1) bounce_step = +1, bounce_pos = 1;
 
         lx_pbx_driver_write_ws2812_chan (&pbx, &chan, (uint8_t *)&data, NUMPIXELS);
         lx_pbx_driver_draw_accumulated (&pbx);
